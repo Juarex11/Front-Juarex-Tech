@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { AuthInitializer } from '@/features/auth/components/auth-initializer';
+
 import { QueryProvider } from './query-provider';
 
 interface AppProvidersProps {
@@ -7,5 +9,9 @@ interface AppProvidersProps {
 }
 
 export function AppProviders({ children }: AppProvidersProps) {
-  return <QueryProvider>{children}</QueryProvider>;
+  return (
+    <QueryProvider>
+      <AuthInitializer>{children}</AuthInitializer>
+    </QueryProvider>
+  );
 }
