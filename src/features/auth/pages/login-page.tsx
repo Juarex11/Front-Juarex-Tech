@@ -4,8 +4,13 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuthStore } from '../stores/auth-store';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+
 import { loginSchema, type LoginFormData } from '../schemas/login-schema';
+import { useAuthStore } from '../stores/auth-store';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -50,43 +55,63 @@ export function LoginPage() {
   };
 
   return (
-    <main>
-      <h1>Iniciar sesión</h1>
-      <p>Ingresa tus credenciales para continuar.</p>
+    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle asChild className="text-3xl">
+            <h1>Iniciar sesión</h1>
+          </CardTitle>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div>
-          <label htmlFor="email">Correo electrónico</label>
+          <CardDescription>Ingresa tus credenciales para continuar.</CardDescription>
+        </CardHeader>
 
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            {...register('email')}
-          />
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+            <Field data-invalid={!!errors.email}>
+              <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
 
-          {errors.email && <p role="alert">{errors.email.message}</p>}
-        </div>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? 'email-error' : undefined}
+                {...register('email')}
+              />
 
-        <div>
-          <label htmlFor="password">Contraseña</label>
+              <FieldError id="email-error">{errors.email?.message}</FieldError>
+            </Field>
 
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            {...register('password')}
-          />
+            <Field data-invalid={!!errors.password}>
+              <FieldLabel htmlFor="password">Contraseña</FieldLabel>
 
-          {errors.password && <p role="alert">{errors.password.message}</p>}
-        </div>
+              <Input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                aria-invalid={!!errors.password}
+                aria-describedby={errors.password ? 'password-error' : undefined}
+                {...register('password')}
+              />
 
-        {serverError && <p role="alert">{serverError}</p>}
+              <FieldError id="password-error">{errors.password?.message}</FieldError>
+            </Field>
 
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
-        </button>
-      </form>
+            {serverError && (
+              <p
+                role="alert"
+                className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+              >
+                {serverError}
+              </p>
+            )}
+
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </main>
   );
 }

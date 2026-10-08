@@ -32,9 +32,7 @@ describe('GuestRoute', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByRole('heading', { name: 'Iniciar sesión' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Iniciar sesión' })).toBeInTheDocument();
   });
 
   it('redirects authenticated users to the dashboard', () => {
@@ -68,13 +66,9 @@ describe('GuestRoute', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.getByRole('heading', { name: 'Dashboard' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
 
-    expect(
-      screen.queryByRole('heading', { name: 'Iniciar sesión' }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Iniciar sesión' })).not.toBeInTheDocument();
   });
 
   it('renders nothing while authentication is not initialized', () => {
@@ -100,8 +94,6 @@ describe('GuestRoute', () => {
       </MemoryRouter>,
     );
 
-    expect(
-      screen.queryByRole('heading', { name: 'Iniciar sesión' }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Iniciar sesión' })).not.toBeInTheDocument();
   });
 });
