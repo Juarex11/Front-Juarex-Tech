@@ -24,16 +24,12 @@ describe('LoginPage', () => {
   it('renders the login form', () => {
     renderLoginPage();
 
-    expect(
-      screen.getByRole('heading', { name: 'Iniciar sesión' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Iniciar sesión' })).toBeInTheDocument();
 
     expect(screen.getByLabelText('Correo electrónico')).toBeInTheDocument();
     expect(screen.getByLabelText('Contraseña')).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('button', { name: 'Iniciar sesión' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Iniciar sesión' })).toBeInTheDocument();
   });
 
   it('shows validation errors when the form is submitted empty', async () => {
@@ -43,13 +39,9 @@ describe('LoginPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
-    expect(
-      screen.getByText('El correo electrónico es obligatorio.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('El correo electrónico es obligatorio.')).toBeInTheDocument();
 
-    expect(
-      screen.getByText('La contraseña es obligatoria.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('La contraseña es obligatoria.')).toBeInTheDocument();
   });
 
   it('shows an error when the email is invalid', async () => {
@@ -62,9 +54,7 @@ describe('LoginPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
-    expect(
-      screen.getByText('Ingresa un correo electrónico válido.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Ingresa un correo electrónico válido.')).toBeInTheDocument();
   });
 
   it('redirects to the dashboard after successful login', async () => {
@@ -72,17 +62,12 @@ describe('LoginPage', () => {
 
     renderLoginPage();
 
-    await user.type(
-      screen.getByLabelText('Correo electrónico'),
-      'admin@example.com',
-    );
+    await user.type(screen.getByLabelText('Correo electrónico'), 'admin@example.com');
     await user.type(screen.getByLabelText('Contraseña'), 'password');
 
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
-    expect(
-      await screen.findByRole('heading', { name: 'Dashboard' }),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
   });
 
   it('shows the server error when login fails', async () => {
@@ -104,16 +89,11 @@ describe('LoginPage', () => {
 
     renderLoginPage();
 
-    await user.type(
-      screen.getByLabelText('Correo electrónico'),
-      'admin@example.com',
-    );
+    await user.type(screen.getByLabelText('Correo electrónico'), 'admin@example.com');
     await user.type(screen.getByLabelText('Contraseña'), 'pasrd');
 
     await user.click(screen.getByRole('button', { name: 'Iniciar sesión' }));
 
-    expect(
-      await screen.findByText('The provided credentials are incorrect.'),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('The provided credentials are incorrect.')).toBeInTheDocument();
   });
 });
