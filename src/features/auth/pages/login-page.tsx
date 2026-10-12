@@ -59,7 +59,7 @@ export function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle asChild className="text-3xl">
-            <h1>Iniciar sesión</h1>
+            <h1>Iniciar sesión 2</h1>
           </CardTitle>
 
           <CardDescription>Ingresa tus credenciales para continuar.</CardDescription>

@@ -24,7 +24,7 @@ describe('GuestRoute', () => {
             path="/login"
             element={
               <GuestRoute>
-                <h1>Iniciar sesión</h1>
+                <h1>2</h1>
               </GuestRoute>
             }
           />
