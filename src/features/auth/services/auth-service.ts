@@ -5,13 +5,15 @@ import type { ApiSuccessResponse } from '@/services/api/types';
 
 import type { AuthenticatedUser } from '../types/auth';
 
+
 const sanctumClient = axios.create({
-  baseURL: env.apiUrl,
-  withCredentials: true,
+  baseURL: env.apiUrl.replace(/\/api\/v1\/?$/, ''),
+  withCredentials: false,
   headers: {
     Accept: 'application/json',
   },
 });
+
 
 export interface LoginCredentials {
   email: string;
