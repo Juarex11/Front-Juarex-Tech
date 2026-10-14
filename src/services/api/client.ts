@@ -5,7 +5,7 @@ import { env } from '@/config/env';
 import { notifyUnauthorized } from './unauthorized-handler';
 
 export const apiClient = axios.create({
-  baseURL: `${env.apiUrl}/api/v1`,
+  baseURL: env.apiUrl,
   withCredentials: true,
   headers: {
     Accept: 'application/json',
