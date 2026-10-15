@@ -5,6 +5,7 @@ import { GuestRoute } from '@/features/auth/components/guest-route';
 import { ProtectedRoute } from '@/features/auth/components/protected-route';
 import { DashboardPage } from '@/features/auth/pages/dashboard-page';
 import { LoginPage } from '@/features/auth/pages/login-page';
+import { ClientesListPage } from '@/features/clientes/pages/clientes-list-page';
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <DashboardPage />,
+      },
+      {
+        path: '/clientes',
+        element: <ClientesListPage />,
       },
     ],
   },
