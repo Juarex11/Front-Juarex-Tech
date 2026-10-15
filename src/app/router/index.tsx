@@ -25,6 +25,10 @@ export const router = createBrowserRouter([
     element: <PlaygroundPage />,
   },
   {
+        path: '/clientes',
+        element: <ClientesListPage />,
+      },
+  {
     element: (
       <ProtectedRoute>
         <Outlet />
@@ -35,10 +39,7 @@ export const router = createBrowserRouter([
         path: '/dashboard',
         element: <DashboardPage />,
       },
-      {
-        path: '/clientes',
-        element: <ClientesListPage />,
-      },
+      
     ],
   },
 ]);
