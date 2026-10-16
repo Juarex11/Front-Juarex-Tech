@@ -20,16 +20,23 @@ export function ClientesListPage() {
   const [selectedCliente, setSelectedCliente] = useState<Cliente | null>(null);
 
   const fetchClientes = async (searchTerm = '') => {
-    setLoading(true);
-    try {
-      const response = await getClientes(searchTerm);
-      setClientes(response.data || response || []);
-    } catch (error) {
-      console.error('Error al obtener los clientes:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const response = await getClientes(searchTerm);
+    setClientes(response.data || response || []);
+  } catch (error) {
+    console.warn('API no disponible o no autenticado aún. Cargando datos de prueba:', error);
+    
+    // DATOS DE PRUEBA TEMPORALES (mientras Víctor termina el login)
+    setClientes([
+      { id: 1, nombre: 'Juan Pérez', email: 'juan@gmail.com', telefono: '987654321' },
+      { id: 2, nombre: 'Empresa ABC', email: 'contacto@abc.com', telefono: '912345678' },
+      { id: 3, nombre: 'María García', email: 'maria@hotmail.com', telefono: '955443322' },
+    ]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchClientes(search);
