@@ -1,45 +1,47 @@
-import axios from 'axios';
-
-import { env } from '@/config/env';
+import { apiClient } from '@/services/api/client';
 import type { ApiSuccessResponse } from '@/services/api/types';
 
 import type { AuthenticatedUser } from '../types/auth';
-
-
-const sanctumClient = axios.create({
-  baseURL: env.apiUrl.replace(/\/api\/v1\/?$/, ''),
-  withCredentials: false,
-  headers: {
-    Accept: 'application/json',
-  },
-});
-
 
 export interface LoginCredentials {
   email: string;
   password: string;
 }
 
-export async function getCsrfCookie(): Promise<void> {
-  await sanctumClient.get('/sanctum/csrf-cookie');
+// Backend aún está ajustando la forma exacta de data; se aceptan las variantes habituales.
+interface LoginResponseData {
+  token?: string;
+  access_token?: string;
+  user?: AuthenticatedUser;
 }
 
-export async function login(credentials: LoginCredentials): Promise<AuthenticatedUser> {
-  const response = await sanctumClient.post<ApiSuccessResponse<AuthenticatedUser>>(
-    '/api/v1/auth/login',
+export interface LoginResult {
+  token: string;
+  user: AuthenticatedUser | null;
+}
+
+export async function login(credentials: LoginCredentials): Promise<LoginResult> {
+  const response = await apiClient.post<ApiSuccessResponse<LoginResponseData>>(
+    '/auth/login',
     credentials,
   );
 
-  return response.data.data;
+  const data = response.data.data;
+  const token = data.token ?? data.access_token;
+
+  if (!token) {
+    throw new Error('La API no devolvió un token.');
+  }
+
+  return { token, user: data.user ?? null };
 }
 
 export async function getCurrentUser(): Promise<AuthenticatedUser> {
-  const response =
-    await sanctumClient.get<ApiSuccessResponse<AuthenticatedUser>>('/api/v1/auth/me');
+  const response = await apiClient.get<ApiSuccessResponse<AuthenticatedUser>>('/auth/me');
 
   return response.data.data;
 }
 
 export async function logout(): Promise<void> {
-  await sanctumClient.post('/api/v1/auth/logout');
+  await apiClient.post('/auth/logout');
 }

@@ -1,5 +1,6 @@
 import { Navigate, Outlet, createBrowserRouter } from 'react-router-dom';
 
+import { HealthPage } from '@/dev/health/health';
 import { PlaygroundPage } from '@/dev/playground/playground-page';
 import { GuestRoute } from '@/features/auth/components/guest-route';
 import { ProtectedRoute } from '@/features/auth/components/protected-route';
@@ -19,6 +20,10 @@ export const router = createBrowserRouter([
         <LoginPage />
       </GuestRoute>
     ),
+  },
+  {
+    path: '/health-check',
+    element: <HealthPage />,
   },
   {
     path: '/playground',

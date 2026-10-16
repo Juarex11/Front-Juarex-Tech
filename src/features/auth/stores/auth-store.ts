@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
+import { clearToken, getToken, setToken } from '../lib/token';
 import {
-  getCsrfCookie,
   getCurrentUser,
   login as loginService,
   logout as logoutService,
@@ -27,25 +27,23 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: false,
 
   initialize: async () => {
+    if (!getToken()) {
+      set({ user: null, isAuthenticated: false, isInitialized: true, isLoading: false });
+
+      return;
+    }
+
     set({ isLoading: true });
 
     try {
       const user = await getCurrentUser();
 
-      set({
-        user,
-        isAuthenticated: true,
-      });
+      set({ user, isAuthenticated: true });
     } catch {
-      set({
-        user: null,
-        isAuthenticated: false,
-      });
+      clearToken();
+      set({ user: null, isAuthenticated: false });
     } finally {
-      set({
-        isInitialized: true,
-        isLoading: false,
-      });
+      set({ isInitialized: true, isLoading: false });
     }
   },
 
@@ -53,14 +51,16 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true });
 
     try {
-      await getCsrfCookie();
+      const { token, user } = await loginService(credentials);
 
-      const user = await loginService(credentials);
+      setToken(token);
 
-      set({
-        user,
-        isAuthenticated: true,
-      });
+      const currentUser = user ?? (await getCurrentUser());
+
+      set({ user: currentUser, isAuthenticated: true });
+    } catch (error) {
+      clearToken();
+      throw error;
     } finally {
       set({ isLoading: false });
     }
@@ -71,20 +71,16 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     try {
       await logoutService();
-
-      set({
-        user: null,
-        isAuthenticated: false,
-      });
+    } catch {
+      // Aunque el servidor falle, la sesión local se cierra igualmente.
     } finally {
-      set({ isLoading: false });
+      clearToken();
+      set({ user: null, isAuthenticated: false, isLoading: false });
     }
   },
 
   handleUnauthorized: () => {
-    set({
-      user: null,
-      isAuthenticated: false,
-    });
+    clearToken();
+    set({ user: null, isAuthenticated: false });
   },
 }));
